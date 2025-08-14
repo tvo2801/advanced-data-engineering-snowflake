@@ -3,9 +3,10 @@ USE DATABASE staging_tasty_bytes;
 USE SCHEMA public;
 
 -- Create an email integration 
-
-TYPE = 
-ENABLED = TRUE
+-- Create an email integration 
+CREATE OR REPLACE NOTIFICATION INTEGRATION email_notification_int
+TYPE = EMAIL
+ENABLED = TRUE -- Update the recipient's email here
 ALLOWED_RECIPIENTS = ('ADD EMAIL ADDRESS');  -- Update the recipient's email here
 
 CREATE OR REPLACE PROCEDURE
@@ -112,8 +113,8 @@ def notify_data_quality_team(session: Session) -> str:
     """
     
     # Send the email:
-    session.call("",
-                 "",
+    session.call("SYSTEM$END_EMAIL",
+                 "email_notification_int",
                  "ADD EMAIL ADDRESS",
                  f"ALERT: {record_count} orders with NULL values detected",
                  email_content,
